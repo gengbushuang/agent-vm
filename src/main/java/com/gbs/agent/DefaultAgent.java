@@ -1,8 +1,8 @@
-package com.agent;
+package com.gbs.agent;
 
 import java.lang.instrument.Instrumentation;
 
-import com.agent.transformer.ClassFileTransformerDispatcher;
+import com.gbs.agent.transformer.ClassFileTransformerDispatcher;
 
 public class DefaultAgent implements Agent {
 

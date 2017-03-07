@@ -1,4 +1,4 @@
-package com.vm;
+package com.gbs.vm;
 
 import java.io.IOException;
 

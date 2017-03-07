@@ -1,4 +1,4 @@
-package com.agent;
+package com.gbs.agent;
 
 import java.io.IOException;
 import java.lang.instrument.ClassFileTransformer;

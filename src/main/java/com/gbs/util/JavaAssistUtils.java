@@ -1,4 +1,4 @@
-package com.util;
+package com.gbs.util;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -1,8 +1,8 @@
-package com.agent.main;
+package com.gbs.agent.main;
 
 import java.lang.instrument.Instrumentation;
 
-import com.agent.DebugTransformer;
+import com.gbs.agent.DebugTransformer;
 
 public class LoadedAgent {
 

@@ -1,4 +1,4 @@
-package com.agent.main;
+package com.gbs.agent.main;
 
 import java.lang.instrument.Instrumentation;
 

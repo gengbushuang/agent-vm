@@ -1,4 +1,4 @@
-package com.agent.instrument.Javassist;
+package com.gbs.agent.instrument.Javassist;
 
 import javassist.CtClass;
 
