@@ -10,6 +10,10 @@ import com.sun.tools.attach.VirtualMachine;
 
 public class TargetVM {
 	
+	public void testmethdo(){
+		System.out.println("testmethdo");
+	}
+	
     public static void main(String[] args) throws AttachNotSupportedException, IOException, AgentLoadException, AgentInitializationException {
     	VirtualMachine vm = VirtualMachine.attach(args[0]);
         vm.loadAgent(args[1]);

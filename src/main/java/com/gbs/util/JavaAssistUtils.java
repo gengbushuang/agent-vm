@@ -414,6 +414,13 @@ public final class JavaAssistUtils {
     }
 
 
+    /**
+     * 方法的参数类型名称
+     * @Description: TODO
+     * @author gbs
+     * @param method
+     * @return
+     */
     public static String[] getParameterVariableName(CtBehavior method) {
         if (method == null) {
             throw new NullPointerException("method must not be null");
