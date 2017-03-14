@@ -1,11 +1,6 @@
 package com.agent.instrument.Javassist;
 
 import java.io.IOException;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -19,12 +14,11 @@ import javassist.NotFoundException;
 
 import org.junit.Test;
 
+import com.gbs.agent.instrument.InstrumentClass;
+import com.gbs.agent.instrument.InstrumentException;
+import com.gbs.agent.instrument.InstrumentMethod;
 import com.gbs.agent.instrument.Javassist.JavassistClass;
 import com.gbs.agent.instrument.Javassist.JavassistMethod;
-import com.gbs.agent.interceptor.AroundInterceptor;
-import com.gbs.agent.interceptor.Interceptor;
-import com.gbs.util.ConstructorResolver;
-import com.gbs.util.InterceptorArgumentProvider;
 
 public class JavassistClassTest {
 
@@ -55,89 +49,27 @@ public class JavassistClassTest {
 			}
 		}
 	}
-	
-	private Method findMethodByName(Method[] declaredMethods, String methodName) {
-        Method findMethod = null;
-        int count = 0;
-        for (Method method : declaredMethods) {
-            if (method.getName().equals(methodName)) {
-                count++;
-                findMethod = method;
-            }
-        }
-        if (findMethod == null) {
-            throw new RuntimeException(methodName + " not found");
-        }
-        if (count > 1 ) {
-            throw new RuntimeException("duplicated method exist. methodName:" + methodName);
-        }
-        return findMethod;
-    }
 
-	void parseMethods(final String className, final Set<String> methodNames) throws NotFoundException, ClassNotFoundException, CannotCompileException, InstantiationException, IllegalAccessException, NoSuchMethodException, SecurityException {
+	void parseMethods(final String className, final Set<String> methodNames) throws NotFoundException, InstrumentException {
 		ClassPool pool = ClassPool.getDefault();
-		
-		Class<? extends Interceptor> interceptorClazz = AroundInterceptor.class;
-		//
-		final Method[] declaredMethods = interceptorClazz.getDeclaredMethods();
-		final String before = "before";
-        final Method beforeMethod = findMethodByName(declaredMethods, before);
-        final Class<?>[] beforeParamList = beforeMethod.getParameterTypes();
-        //
-        final String after = "after";
-        final Method afterMethod = findMethodByName(declaredMethods, after);
-        final Class<?>[] afterParamList = afterMethod.getParameterTypes();
-        
-		
+
 		CtClass ctClass = pool.get(className);
-		JavassistClass javassistClass = new JavassistClass(pool.getClassLoader(), ctClass);
+		InstrumentClass instrumentClass = new JavassistClass(pool.getClassLoader(), ctClass);
 		String interceptorClassName = "com.gbs.plugin.interceptor.UserIncludeMethodInterceptor";
 		System.out.println(ctClass);
-//		final String[] names = methodNames.toArray(new String[methodNames.size()]);
+		// final String[] names = methodNames.toArray(new
+		// String[methodNames.size()]);
 		final CtMethod[] declaredMethod = ctClass.getDeclaredMethods();
-		for(CtMethod ctMethod:declaredMethod){
-			if(methodNames.contains(ctMethod.getName())){
-				JavassistMethod javassistMethod = new JavassistMethod(javassistClass, ctMethod);
-				System.out.println(javassistMethod.getName());
-				Class<?> interceptorType = Class.forName(interceptorClassName);
-				System.out.println("forName-->"+interceptorType);
-				//
-				InterceptorArgumentProvider argumentProvider = new InterceptorArgumentProvider(javassistClass, javassistMethod);
-				ConstructorResolver resolver = new ConstructorResolver(interceptorType, argumentProvider);
-				//
-				if(!resolver.resolve()){
-					System.err.println("Cannot find suitable constructor for " + interceptorType.getName());
-					return;
-				}
-				 final Constructor<?> constructor = resolver.getResolvedConstructor();
-			     final Object[] resolvedArguments = resolver.getResolvedArguments();
-			     System.out.println("constructor-->"+constructor);
-			     System.out.println("resolvedArguments-->"+Arrays.toString(resolvedArguments));
-			     try {
-			    	 Interceptor newInstance = (Interceptor)constructor.newInstance(resolvedArguments);
-					System.out.println("newInstance-->"+newInstance);
-					
-					if(interceptorClazz.isAssignableFrom(newInstance.getClass())){
-						System.out.println("newInstance is Interceptor");
-						 final Class<? extends Interceptor> casting = (Class<? extends Interceptor>) newInstance.getClass();
-						 final Method newbeforeMethod = casting.getMethod("before", beforeParamList);
-						 System.out.println("newbeforeMethod-->"+newbeforeMethod);
-						 final Method newafterMethod = casting.getMethod("after", afterParamList);
-						 System.out.println("newafterMethod-->"+newafterMethod);
-						 
-						 
-						 
-					}
-				} catch (IllegalArgumentException | InvocationTargetException e) {
-					e.printStackTrace();
-				}
-				
+		for (CtMethod ctMethod : declaredMethod) {
+			if (methodNames.contains(ctMethod.getName())) {
+				InstrumentMethod instrumentMethod = new JavassistMethod(instrumentClass, ctMethod);
+				instrumentMethod.addInterceptor(interceptorClassName);
 			}
 		}
-//		Class c = ctClass.toClass();
-//		TargetVM h = (TargetVM)c.newInstance();
-//		h.testmethdo();
-		ctClass.detach();
+		// Class c = ctClass.toClass();
+		// TargetVM h = (TargetVM)c.newInstance();
+		// h.testmethdo();
+		instrumentClass.toBytecode();
 	}
 
 	String toClassName(String fullQualifiedMethodName) {
@@ -160,6 +92,6 @@ public class JavassistClassTest {
 
 	@Test
 	public void testClass() throws CannotCompileException, NotFoundException, IOException {
-		
+
 	}
 }
