@@ -1,4 +1,4 @@
-package com.gbs.plugin;
+package com.gbs.plugin.user;
 
 import java.util.Arrays;
 

@@ -1,6 +1,6 @@
 package com.gbs.agent.instrument;
 
-import com.gbs.plugin.MethodDescriptor;
+import com.gbs.plugin.user.MethodDescriptor;
 
 public interface InstrumentMethod {
 	/**

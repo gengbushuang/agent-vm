@@ -2,6 +2,13 @@ package com.gbs.agent.interceptor.registry;
 
 import java.util.concurrent.atomic.AtomicReferenceArray;
 
+/**
+ * 原子方式数组类
+ * @Description:TODO
+ * @author gbs
+ * @Date 2017年3月15日 上午10:41:29
+ * @param <T>
+ */
 public final class WeakAtomicReferenceArray<T> {
 
 	private final int length;
@@ -15,6 +22,13 @@ public final class WeakAtomicReferenceArray<T> {
 		// this.array = (T[]) Array.newInstance(clazz, length);
 	}
 
+	/**
+	 * 
+	 * @Description: TODO
+	 * @author gbs
+	 * @param index
+	 * @param newValue
+	 */
 	public void set(int index, T newValue) {
 		this.atomicArray.set(index, newValue);
 		// need TestCase ~~

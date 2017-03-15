@@ -12,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 import com.gbs.agent.instrument.InstrumentClass;
 import com.gbs.agent.instrument.InstrumentException;
 import com.gbs.agent.instrument.InstrumentMethod;
+import com.gbs.agent.interceptor.registry.DefaultInterceptorRegistryBinder;
 import com.gbs.agent.transformer.ClassFilter;
 import com.gbs.agent.transformer.MethodFilter;
 
@@ -21,10 +22,13 @@ public class JavassistClass implements InstrumentClass {
 
 	private final ClassLoader classLoader;
 	private final CtClass ctClass;
+	
+	private final DefaultInterceptorRegistryBinder interceptorRegistryBinder;
 
-	public JavassistClass(ClassLoader classLoader, CtClass ctClass) {
+	public JavassistClass(DefaultInterceptorRegistryBinder interceptorRegistryBinder,ClassLoader classLoader, CtClass ctClass) {
 		this.ctClass = ctClass;
 		this.classLoader = classLoader;
+		this.interceptorRegistryBinder = interceptorRegistryBinder;
 	}
 
 	public ClassLoader getClassLoader() {

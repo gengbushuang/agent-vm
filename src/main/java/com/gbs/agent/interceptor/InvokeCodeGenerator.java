@@ -4,7 +4,7 @@ import java.lang.reflect.Modifier;
 
 import com.gbs.agent.instrument.InstrumentMethod;
 import com.gbs.agent.interceptor.registry.InterceptorRegistry;
-import com.gbs.plugin.MethodDescriptor;
+import com.gbs.plugin.user.MethodDescriptor;
 import com.gbs.util.JavaAssistUtils;
 
 public class InvokeCodeGenerator {

@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import com.gbs.agent.instrument.InstrumentClass;
 import com.gbs.agent.instrument.InstrumentMethod;
-import com.gbs.plugin.MethodDescriptor;
+import com.gbs.plugin.user.MethodDescriptor;
 
 public class InterceptorArgumentProvider {
 

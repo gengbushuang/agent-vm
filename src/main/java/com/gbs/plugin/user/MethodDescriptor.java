@@ -1,4 +1,4 @@
-package com.gbs.plugin;
+package com.gbs.plugin.user;
 
 public interface MethodDescriptor {
 	String getMethodName();

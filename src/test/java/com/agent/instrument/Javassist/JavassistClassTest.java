@@ -52,7 +52,7 @@ public class JavassistClassTest {
 
 	void parseMethods(final String className, final Set<String> methodNames) throws NotFoundException, InstrumentException {
 		ClassPool pool = ClassPool.getDefault();
-
+		
 		CtClass ctClass = pool.get(className);
 		InstrumentClass instrumentClass = new JavassistClass(pool.getClassLoader(), ctClass);
 		String interceptorClassName = "com.gbs.plugin.interceptor.UserIncludeMethodInterceptor";

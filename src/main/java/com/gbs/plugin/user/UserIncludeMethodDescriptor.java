@@ -1,4 +1,4 @@
-package com.gbs.plugin;
+package com.gbs.plugin.user;
 
 public class UserIncludeMethodDescriptor implements MethodDescriptor {
 	private int apiId = 0;

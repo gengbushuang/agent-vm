@@ -1,4 +1,4 @@
-package com.gbs.plugin;
+package com.gbs.plugin.user;
 public enum ExecutionPolicy {
     ALWAYS,
     BOUNDARY,

@@ -28,8 +28,9 @@ import com.gbs.agent.interceptor.InterceptorDefinition;
 import com.gbs.agent.interceptor.InvokeAfterCodeGenerator;
 import com.gbs.agent.interceptor.InvokeBeforeCodeGenerator;
 import com.gbs.agent.interceptor.InvokeCodeGenerator;
-import com.gbs.plugin.DefaultMethodDescriptor;
-import com.gbs.plugin.MethodDescriptor;
+import com.gbs.agent.interceptor.registry.DefaultInterceptorRegistryBinder;
+import com.gbs.plugin.user.DefaultMethodDescriptor;
+import com.gbs.plugin.user.MethodDescriptor;
 import com.gbs.util.ConstructorResolver;
 import com.gbs.util.InterceptorArgumentProvider;
 import com.gbs.util.InterceptorDefinitionUtils;
@@ -40,12 +41,14 @@ public class JavassistMethod implements InstrumentMethod {
 	private final CtBehavior behavior;
 	private final InstrumentClass declaringClass;
 	private final MethodDescriptor descriptor;
+	private final DefaultInterceptorRegistryBinder interceptorRegistryBinder;
+	
 	private final static InterceptorDefinitionUtils interceptorDefinitionUtils = new InterceptorDefinitionUtils();
 
-	public JavassistMethod(InstrumentClass declaringClass, CtBehavior behavior) {
+	public JavassistMethod(InstrumentClass declaringClass, CtBehavior behavior,DefaultInterceptorRegistryBinder interceptorRegistryBinder) {
 		this.behavior = behavior;
 		this.declaringClass = declaringClass;
-
+		this.interceptorRegistryBinder = interceptorRegistryBinder;
 		String[] parameterVariableNames = JavaAssistUtils.getParameterVariableName(behavior);
 		int lineNumber = JavaAssistUtils.getLineNumber(behavior);
 
@@ -106,7 +109,7 @@ public class JavassistMethod implements InstrumentMethod {
 	private int addInterceptor0(String interceptorClassName, Object[] constructorArgs) {
 		try {
 			Interceptor interceptor = createInterceptor(interceptorClassName, constructorArgs);
-			int interceptorId = 1;
+			int interceptorId = interceptorRegistryBinder.getInterceptorRegistryAdaptor().addInterceptor(interceptor);
 			addInterceptor0(interceptor, interceptorId);
 		} catch (NotFoundException e) {
 			e.printStackTrace();
