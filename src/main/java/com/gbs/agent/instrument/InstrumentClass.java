@@ -1,6 +1,7 @@
 package com.gbs.agent.instrument;
 
 import java.util.List;
+import java.util.Set;
 
 import com.gbs.agent.transformer.ClassFilter;
 import com.gbs.agent.transformer.MethodFilter;
@@ -18,6 +19,8 @@ public interface InstrumentClass {
     InstrumentMethod getConstructor(String... parameterTypes);
 
     List<InstrumentMethod> getDeclaredMethods();
+    
+    List<InstrumentMethod> getDeclaredMethods(Set<String> methodNames);
 
     List<InstrumentMethod> getDeclaredMethods(MethodFilter filter);
 

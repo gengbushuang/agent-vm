@@ -3,6 +3,7 @@ package com.agent.instrument.Javassist;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -21,6 +22,7 @@ import com.gbs.agent.instrument.Javassist.JavassistClass;
 import com.gbs.agent.instrument.Javassist.JavassistClassPool;
 import com.gbs.agent.instrument.Javassist.JavassistMethod;
 import com.gbs.agent.interceptor.registry.DefaultInterceptorRegistryBinder;
+import com.gbs.vm.TargetVM;
 
 public class JavassistClassTest {
 
@@ -54,24 +56,25 @@ public class JavassistClassTest {
 
 	void parseMethods(final String className, final Set<String> methodNames) throws NotFoundException, InstrumentException {
 		DefaultInterceptorRegistryBinder interceptorRegistryBinder = new DefaultInterceptorRegistryBinder();
-		
+		interceptorRegistryBinder.bind();
 		ClassPool pool = ClassPool.getDefault();
 		CtClass ctClass = pool.get(className);
 		InstrumentClass instrumentClass = new JavassistClass(interceptorRegistryBinder,pool.getClassLoader(), ctClass);
-		String interceptorClassName = "com.gbs.plugin.interceptor.UserIncludeMethodInterceptor";
+		String interceptorClassName = "com.gbs.plugin.user.interceptor.UserIncludeMethodInterceptor";
 		System.out.println(ctClass);
 		// final String[] names = methodNames.toArray(new
 		// String[methodNames.size()]);
-		final CtMethod[] declaredMethod = ctClass.getDeclaredMethods();
-		for (CtMethod ctMethod : declaredMethod) {
-			if (methodNames.contains(ctMethod.getName())) {
-				InstrumentMethod instrumentMethod = new JavassistMethod(instrumentClass, ctMethod,interceptorRegistryBinder);
-				instrumentMethod.addInterceptor(interceptorClassName);
-			}
+		List<InstrumentMethod> declaredMethods = instrumentClass.getDeclaredMethods(methodNames);
+		for (InstrumentMethod instrumentMethod : declaredMethods) {
+			instrumentMethod.addInterceptor(interceptorClassName);
 		}
-		// Class c = ctClass.toClass();
-		// TargetVM h = (TargetVM)c.newInstance();
-		// h.testmethdo();
+		 try {
+			Class c = ctClass.toClass();
+			TargetVM h = (TargetVM) c.newInstance();
+			h.testmethdo();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 		instrumentClass.toBytecode();
 	}
 

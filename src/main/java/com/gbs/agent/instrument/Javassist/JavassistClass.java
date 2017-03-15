@@ -1,10 +1,13 @@
 package com.gbs.agent.instrument.Javassist;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javassist.CannotCompileException;
 import javassist.CtClass;
+import javassist.CtMethod;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -205,6 +208,18 @@ public class JavassistClass implements InstrumentClass {
 			logger.info("CannotCompileException class:{} Caused:{}", ctClass.getName(), e.getMessage(), e);
 		}
 		return null;
+	}
+
+	@Override
+	public List<InstrumentMethod> getDeclaredMethods(Set<String> methodNames) {
+		List<InstrumentMethod> instrumentMethods = new ArrayList<>();
+		CtMethod[] methods = ctClass.getDeclaredMethods();
+		for(CtMethod method:methods){
+			if(methodNames.contains(method.getName())){
+				instrumentMethods.add(new JavassistMethod(this, method, interceptorRegistryBinder));
+			}
+		}
+		return instrumentMethods;
 	}
 
 }
