@@ -18,7 +18,9 @@ import com.gbs.agent.instrument.InstrumentClass;
 import com.gbs.agent.instrument.InstrumentException;
 import com.gbs.agent.instrument.InstrumentMethod;
 import com.gbs.agent.instrument.Javassist.JavassistClass;
+import com.gbs.agent.instrument.Javassist.JavassistClassPool;
 import com.gbs.agent.instrument.Javassist.JavassistMethod;
+import com.gbs.agent.interceptor.registry.DefaultInterceptorRegistryBinder;
 
 public class JavassistClassTest {
 
@@ -51,10 +53,11 @@ public class JavassistClassTest {
 	}
 
 	void parseMethods(final String className, final Set<String> methodNames) throws NotFoundException, InstrumentException {
-		ClassPool pool = ClassPool.getDefault();
+		DefaultInterceptorRegistryBinder interceptorRegistryBinder = new DefaultInterceptorRegistryBinder();
 		
+		ClassPool pool = ClassPool.getDefault();
 		CtClass ctClass = pool.get(className);
-		InstrumentClass instrumentClass = new JavassistClass(pool.getClassLoader(), ctClass);
+		InstrumentClass instrumentClass = new JavassistClass(interceptorRegistryBinder,pool.getClassLoader(), ctClass);
 		String interceptorClassName = "com.gbs.plugin.interceptor.UserIncludeMethodInterceptor";
 		System.out.println(ctClass);
 		// final String[] names = methodNames.toArray(new
@@ -62,7 +65,7 @@ public class JavassistClassTest {
 		final CtMethod[] declaredMethod = ctClass.getDeclaredMethods();
 		for (CtMethod ctMethod : declaredMethod) {
 			if (methodNames.contains(ctMethod.getName())) {
-				InstrumentMethod instrumentMethod = new JavassistMethod(instrumentClass, ctMethod);
+				InstrumentMethod instrumentMethod = new JavassistMethod(instrumentClass, ctMethod,interceptorRegistryBinder);
 				instrumentMethod.addInterceptor(interceptorClassName);
 			}
 		}
