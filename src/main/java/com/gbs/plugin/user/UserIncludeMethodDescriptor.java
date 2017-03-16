@@ -1,7 +1,7 @@
 package com.gbs.plugin.user;
 
 public class UserIncludeMethodDescriptor implements MethodDescriptor {
-	private int apiId = 0;
+	private int apiId = 7;
 	private int type = 100;
 
 	@Override

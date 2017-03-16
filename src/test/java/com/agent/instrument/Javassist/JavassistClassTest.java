@@ -28,7 +28,7 @@ public class JavassistClassTest {
 
 	@Test
 	public void testJavassistClass() {
-		String[] s = new String[] { "com.gbs.vm.TargetVM.testmethdo" };
+		String[] s = new String[] { "com.gbs.vm.TargetVM.test3","com.gbs.vm.TargetVM.test","com.gbs.vm.TargetVM.test1","com.gbs.vm.TargetVM.test2" };
 		final Map<String, Set<String>> methods = new HashMap<String, Set<String>>();
 		for (String fullQualifiedMethodName : s) {
 			try {
@@ -71,7 +71,9 @@ public class JavassistClassTest {
 		 try {
 			Class c = ctClass.toClass();
 			TargetVM h = (TargetVM) c.newInstance();
-			h.testmethdo();
+			h.test();
+			System.out.println(">>>>>>>>>>>>>>>>>>>>>");
+			h.test();
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
