@@ -44,7 +44,6 @@ public class JavassistClassTest {
 
 			}
 		}
-		System.out.println(methods);
 		for (Map.Entry<String, Set<String>> entry : methods.entrySet()) {
 			try {
 				parseMethods(entry.getKey(), entry.getValue());

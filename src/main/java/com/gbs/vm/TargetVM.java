@@ -11,21 +11,29 @@ public class TargetVM {
 
 	public void test() {
 		System.out.println("test");
+		try{
 		test1();
+		}catch(Exception e){
+			
+		}
 		test2();
 	}
 
 	public void test1() {
 		System.out.println("test1");
-		test3();
+		int test3 = test3();
+		System.out.println(test3);
 	}
 
 	public void test2() {
 		System.out.println("test2");
 	}
-	
-	public void test3() {
+
+	public int test3() {
 		System.out.println("test3");
+		int t = 0;
+			t = 4 / 0;
+		return t;
 	}
 
 	public static void main(String[] args) throws AttachNotSupportedException, IOException, AgentLoadException, AgentInitializationException {

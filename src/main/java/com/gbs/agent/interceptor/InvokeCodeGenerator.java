@@ -52,9 +52,9 @@ public class InvokeCodeGenerator {
 
 	protected int getApiId() {
 		final MethodDescriptor descriptor = targetMethod.getDescriptor();
-		// final int apiId = traceContext.cacheApi(descriptor);
-		// return apiId;
-		return 1;
+//		 final int apiId = traceContext.cacheApi(descriptor);
+//		 return apiId;
+		return descriptor.getApiId();
 	}
 
 	protected String getInterceptorInvokerHelperClassName() {
